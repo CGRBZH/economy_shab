@@ -3,7 +3,8 @@ const DATA_URL =
   "https://raw.githubusercontent.com/statistikZH/economy_SHAB/master/Economy_SHAB.csv?token=ALJEHNUR3CYKD2DQD3KLTXS66QMAU";
 
 const dispatch = d3.dispatch("updatelocation", "updateyear");
-const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
+//const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
+const colors = ["#a9dfff", "#009ee0", "#0076bd", "#00456f"];
 
 // Process data
 d3.csv(DATA_URL).then((csv) => {
@@ -187,7 +188,7 @@ function renderChart({ data }) {
     .attr("transform", `translate(${margin.left},${margin.top})`);
   const gLines = g.append("g").attr("class", "lines");
   const gXAxis = g.append("g").attr("class", "x axis");
-  const xTitle = g.append("text").text("Cumulated Total").attr("dy", "-6");
+  const xTitle = g.append("text").text("Kumulierte Tageswerte").attr("dy", "-6");
   const gYAxis = g.append("g").attr("class", "y axis");
   const gFocus = g.append("g").attr("class", "focus").style("display", "none");
   const focusHorizontalLine = gFocus.append("line").attr("class", "focus-line");
@@ -301,7 +302,7 @@ function renderChart({ data }) {
       .attr("x2", xScale(d.data.time))
       .attr("y2", height);
     tooltip.style("border-color", colorScale(d.data.year)).html(`
-        <div>Date: ${d.data.date}</div>
+        <div>Datum: ${d.data.date}</div>
         <div>Total: ${d3.format(",")(d.data.total)}</div>
       `);
     tooltip.style("display", null);
