@@ -2,7 +2,7 @@
 const DATA_URL =
   "https://raw.githubusercontent.com/statistikZH/economy_SHAB/master/Economy_SHAB.csv?token=ALJEHNUR3CYKD2DQD3KLTXS66QMAU";
 
-const dispatch = d3.dispatch("updatelocation", "updateyear");
+const dispatch = d3.dispatch("updatelocation", "updateyear"); // Select options at top of chart
 //const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
 const colors = ["#a9dfff", "#009ee0", "#0076bd", "#00456f"];
 
@@ -11,14 +11,14 @@ d3.csv(DATA_URL).then((csv) => {
   // Convert all date to 2020 so they can be plotted on the same x time axis
   const parseTime = d3.timeParse("%Y-%m-%d");
   csv.forEach((d) => {
-    d.value = +d.value;
-    d.year = d.date.slice(0, 4);
-    d.time = parseTime(`2020-${d.date.slice(5)}`);
+    d.value = +d.value; // Values to numeric
+    d.year = d.date.slice(0, 4); // Extract year from date
+    d.time = parseTime(`2020-${d.date.slice(5)}`); // Month-Day
   });
   // Group data
   const grouped = d3
     .nest()
-    .key((d) => d.location)
+    .key((d) => d.location) 
     .key((d) => d.year)
     .entries(csv);
   const dataCH = d3
@@ -27,8 +27,8 @@ d3.csv(DATA_URL).then((csv) => {
     .key((d) => d.date)
     .rollup((leaves) =>
       Object.assign({}, leaves[0], {
-        location: "CH",
-        value: d3.sum(leaves, (d) => d.value),
+        location: "CH", // Assignn new location CH
+        value: d3.sum(leaves, (d) => d.value), // Summing up all location to get values for CH
       })
     )
     .entries(csv);
@@ -38,7 +38,7 @@ d3.csv(DATA_URL).then((csv) => {
       key: "CH",
       values: dataCH,
     },
-    ...grouped,
+    ...grouped, // join with grouped data
   ];
   // Calculate cumulative sum
   data.forEach((d) =>
@@ -104,7 +104,7 @@ function renderYearSelect({ options, colors, dispatch }) {
   let selected = new Set(options);
   const option = select
     .selectAll(".legend-item")
-    .data(d3.zip(options, colors).map((d) => ({ value: d[0], color: d[1] })))
+    .data(d3.zip(options, colors).map((d) => ({ value: d[0], color: d[1] }))) // map colors to years
     .join("div")
     .attr("class", "legend-item")
     .on("click", toggle);
