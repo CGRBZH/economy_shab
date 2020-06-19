@@ -4,7 +4,23 @@ const DATA_URL =
 
 const dispatch = d3.dispatch("updatelocation", "updateyear"); // Select options at top of chart
 //const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
-const colors = ["#a9dfff", "#009ee0", "#0076bd", "#00456f"];
+const colors = ["#a9dfff", "#009ee0", "#0076bd", "#e30059"];
+
+const de_CH = {
+        'decimal': '.',
+        'thousands': '\'',
+        'grouping': [3],
+        'currency': ['CHF', ''],
+        'dateTime': '%A, %d.%m.%Y, %X Uhr',
+        'date': '%d.%m.%Y',
+        'time': '%H:%M:%S',
+        'periods': ['AM', 'PM'],
+        'days': ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        'shortDays': ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+        'months': ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        'shortMonths': ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+};
+
 
 // Process data
 d3.csv(DATA_URL).then((csv) => {
@@ -83,6 +99,8 @@ d3.csv(DATA_URL).then((csv) => {
     });
   });
 });
+
+
 
 // Location select
 function renderLocationSelect({ options, dispatch }) {
@@ -208,7 +226,7 @@ function renderChart({ data }) {
   function render() {
     // Dimensions
     svgWidth = container.node().clientWidth;
-    svgHeight = container.node().clientHeight;
+    svgHeight = 500;
     width = svgWidth - margin.left - margin.right;
     height = svgHeight - margin.top - margin.bottom;
     svg.attr("width", svgWidth).attr("height", svgHeight);
@@ -242,10 +260,11 @@ function renderChart({ data }) {
     // Render x axis
     gXAxis
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickFormat((d) => d3.timeFormat("%b")(d)));
+      .call(d3.axisBottom(xScale).tickFormat(d => d.toLocaleString("de-CH", {month: "short"})));
 
     // Render y axis
-    gYAxis.call(d3.axisLeft(yScale).ticks(height / 80));
+    gYAxis.call(d3.axisLeft(yScale).tickFormat(d => d.toLocaleString("de-CH", {thousands: "'"})).ticks(height / 80));
+   
 
     // Update voronoi
     gVoronoi
@@ -303,9 +322,9 @@ function renderChart({ data }) {
       .attr("y2", height);
     tooltip.style("border-color", colorScale(d.data.year)).html(`
         <div>Datum: ${d.data.date}</div>
-        <div>Total: ${d3.format(",")(d.data.total)}</div>
+        <div>Total: ${d.data.total}</div>
       `);
-    tooltip.style("display", null);
+    tooltip.style("display", null);  // ${d3.format(d => d.toLocaleString("de-CH", {thousands: "'"}))(d.data.total)}
   }
 
   function left() {
