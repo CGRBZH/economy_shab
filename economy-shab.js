@@ -6,22 +6,6 @@ const dispatch = d3.dispatch("updatelocation", "updateyear"); // Select options 
 //const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
 const colors = ["#a9dfff", "#009ee0", "#0076bd", "#e30059"];
 
-const de_CH = {
-        'decimal': '.',
-        'thousands': '\'',
-        'grouping': [3],
-        'currency': ['CHF', ''],
-        'dateTime': '%A, %d.%m.%Y, %X Uhr',
-        'date': '%d.%m.%Y',
-        'time': '%H:%M:%S',
-        'periods': ['AM', 'PM'],
-        'days': ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-        'shortDays': ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-        'months': ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-        'shortMonths': ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
-};
-
-
 // Process data
 d3.csv(DATA_URL).then((csv) => {
   // Convert all date to 2020 so they can be plotted on the same x time axis
@@ -235,6 +219,8 @@ function renderChart({ data }) {
       [width + 1, height + 1],
     ]);
 
+    const source = g.append("text").text("Quelle: SHAB via Moneyhouse API").attr("dy", "-6").attr("x", svgWidth - (8 * margin.right)).style('text-anchor', 'end');
+
     // Selected data
     const selectedData = data
       .find((d) => d.key === selected.location)
@@ -324,7 +310,7 @@ function renderChart({ data }) {
         <div>Datum: ${d.data.date}</div>
         <div>Total: ${d.data.total}</div>
       `);
-    tooltip.style("display", null);  // ${d3.format(d => d.toLocaleString("de-CH", {thousands: "'"}))(d.data.total)}
+    tooltip.style("display", null);
   }
 
   function left() {
@@ -337,6 +323,7 @@ function renderChart({ data }) {
     if (years) selected.years = years;
     render();
   }
+
 
   return {
     update,
