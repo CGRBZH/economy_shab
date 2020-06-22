@@ -203,7 +203,7 @@ function renderChart({ data }) {
   const tooltip = container
     .append("div")
     .attr("class", "tooltip")
-    .style("display", "none");
+    .style("display", "none");  
 
   window.addEventListener("resize", render);
 
@@ -218,8 +218,6 @@ function renderChart({ data }) {
       [-1, -1],
       [width + 1, height + 1],
     ]);
-
-    const source = g.append("text").text("Quelle: SHAB via Moneyhouse API").attr("dy", "-6").attr("x", svgWidth - (8 * margin.right)).style('text-anchor', 'end');
 
     // Selected data
     const selectedData = data
