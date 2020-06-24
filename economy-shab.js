@@ -1,6 +1,6 @@
 // Set up
 const DATA_URL =
-  "https://raw.githubusercontent.com/statistikZH/economy_SHAB/master/Economy_SHAB.csv";
+  "https://raw.githubusercontent.com/statistikZH/covid19monitoring_economy_SHAB/master/Economy_SHAB.csv";
 
 const dispatch = d3.dispatch("updatelocation", "updateyear"); // Select options at top of chart
 //const colors = ["#ebc2ff", "#a27ffb", "#5f45c5", "#111188"];
